@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentMigrator" Version="6.2.0" />
+    <PackageReference Include="FluentMigrator.Runner" Version="6.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
@@ -21,7 +23,6 @@
 
 	<ItemGroup>
 		<Folder Include="v1\Controllers\" />
-		<Folder Include="v1\Model\" />
 		<Folder Include="v1\ViewModel\" />
 		<Folder Include="v1\Repositories\" />
 	</ItemGroup>
