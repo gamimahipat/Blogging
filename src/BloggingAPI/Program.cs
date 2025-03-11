@@ -1,15 +1,18 @@
 using BloggingAPI.Database;
 using BloggingAPI.Generic;
-using FluentMigrator.Runner;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using Microsoft.VisualBasic;
+using Serilog;
 using System.Reflection;
-using System.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 
@@ -51,6 +54,10 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseSerilogRequestLogging();
+
+Log.Error("Check Serilog Message");
 
 app.UseHttpsRedirection();
 
