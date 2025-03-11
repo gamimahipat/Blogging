@@ -1,4 +1,6 @@
-﻿using FluentMigrator.Runner;
+﻿using FluentMigrator.Builders.Create.Table;
+using FluentMigrator;
+using FluentMigrator.Runner;
 using System.Reflection;
 
 namespace BloggingAPI.Database
@@ -41,6 +43,21 @@ namespace BloggingAPI.Database
 
             // Execute the migrations
             runner.MigrateUp();
+        }
+    }
+
+    public static class MigrationExtensions
+    {
+        public static ICreateTableColumnOptionOrWithColumnSyntax AddDefaultColumns(
+            this ICreateTableColumnOptionOrWithColumnSyntax table)
+        {
+            return table
+                .WithColumn("CreatedOn").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
+                .WithColumn("CreatedBy").AsInt32().Nullable()
+                .WithColumn("UpdatedOn").AsDateTime().Nullable()
+                .WithColumn("UpdatedBy").AsInt32().Nullable()
+                .WithColumn("VersionNo").AsInt32().NotNullable().WithDefaultValue(1)
+                .WithColumn("IsActive").AsBoolean().NotNullable().WithDefaultValue(true);
         }
     }
 }
