@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
+using BloggingAPI.v1;
 
 namespace BloggingAPI.Generic
 {
@@ -7,21 +7,11 @@ namespace BloggingAPI.Generic
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
-        //public DbSet<Blog> Blogs { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<User>().ToTable("Users").HasKey(u => u.Id);
         }
 
-    }
-
-    public class User
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public DbSet<Users> Users { get; set; }
     }
 }

@@ -9,10 +9,14 @@ namespace BloggingAPI.Database
         {
             Create.Table("Users")
                 .WithColumn("Id").AsInt32().PrimaryKey().Identity()
+                .WithColumn("UserName").AsString(100).NotNullable().Unique()
                 .WithColumn("Name").AsString(100).NotNullable()
-                .WithColumn("Email").AsString(50).NotNullable()
-                .WithColumn("MobileNo").AsString(15).NotNullable()
-                .WithColumn("Password").AsString(100).NotNullable()
+                .WithColumn("Email").AsString(50).NotNullable().Unique()
+                .WithColumn("MobileNo").AsString(15).NotNullable().Unique()
+                .WithColumn("PasswordHash").AsString(100).NotNullable()
+                .WithColumn("Salt").AsString(50).NotNullable()
+                .WithColumn("ProfileImageUrl").AsCustom("NVARCHAR(MAX)").Nullable()
+                .WithColumn("Bio").AsString(500).Nullable()
                 .AddDefaultColumns();
         }
 

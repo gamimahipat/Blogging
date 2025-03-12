@@ -1,5 +1,4 @@
 ﻿using FluentMigrator;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
 
 namespace BloggingAPI.Database.v1

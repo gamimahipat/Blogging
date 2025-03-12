@@ -25,17 +25,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add Database Context
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add FluentMigrator
-//MigratorRunner.MigrateDB(builder.Configuration.GetConnectionString("DefaultConnection"), "dbo", typeof(Program).Assembly);
-
-MigratorRunner.MigrateDB(
-    builder.Configuration.GetConnectionString("DefaultConnection"),
-    "dbo",
-    Assembly.GetExecutingAssembly()
-);
+MigratorRunner.MigrateDB(builder.Configuration.GetConnectionString("DefaultConnection"), "dbo", Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
