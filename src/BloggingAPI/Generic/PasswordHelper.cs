@@ -1,22 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace BloggingAPI.Generic
 {
     public static class PasswordHelper
     {
-        private static readonly PasswordHasher<object> _passwordHasher = new PasswordHasher<object>();
-
-        public static string HashPassword(string password)
-        {
-            return _passwordHasher.HashPassword(null, password);
-        }
-
-        public static bool VerifyPassword(string hashedPassword, string enteredPassword)
-        {
-            return _passwordHasher.VerifyHashedPassword(null, hashedPassword, enteredPassword) == PasswordVerificationResult.Success;
-        }
         public static string GenerateSalt(int size = 16)
         {
             byte[] salt = new byte[size];

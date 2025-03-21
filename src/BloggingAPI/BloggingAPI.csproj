@@ -28,10 +28,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="v1\Controllers\" />
-		<Folder Include="v1\ViewModel\" />
-		<Folder Include="v1\Repositories\" />
-	</ItemGroup>
-
 </Project>

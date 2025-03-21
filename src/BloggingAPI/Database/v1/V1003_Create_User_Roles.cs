@@ -14,6 +14,10 @@ namespace BloggingAPI.Database.v1
                 .WithColumn("RoleId").AsInt32().NotNullable()
                 .AddDefaultColumns();
 
+            // Ensure a user cannot have the same role multiple times
+            Create.UniqueConstraint("UQ_UserRoles_UserId_RoleId")
+                .OnTable("UserRoles").Columns("UserId", "RoleId");
+
             // Add foreign key to Users table
             Create.ForeignKey("FK_UserRoles_Users")
                 .FromTable("UserRoles").ForeignColumn("UserId")
@@ -31,6 +35,8 @@ namespace BloggingAPI.Database.v1
         {
             Delete.ForeignKey("FK_UserRoles_Users").OnTable("UserRoles");
             Delete.ForeignKey("FK_UserRoles_Roles").OnTable("UserRoles");
+
+            Delete.UniqueConstraint("UQ_UserRoles_UserId_RoleId").FromTable("UserRoles");
 
             Delete.Table("UserRoles");
         }
