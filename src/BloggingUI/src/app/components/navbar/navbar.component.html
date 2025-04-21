@@ -1,0 +1,16 @@
+<nav>
+  <div class="logo">
+    <a routerLink="/">MyBlog</a>
+  </div>
+
+  <button class="menu-toggle" (click)="toggleMenu()">
+    ☰
+  </button>
+
+  <ul [class.show]="isMenuOpen">
+    <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
+    <li><a routerLink="/about" (click)="closeMenu()">About</a></li>
+    <li><a routerLink="/blog" (click)="closeMenu()">Blog</a></li>
+    <li><a routerLink="/login" (click)="closeMenu()">Login</a></li>
+  </ul>
+</nav>
