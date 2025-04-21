@@ -1,67 +1,73 @@
-/* Navbar container */
-nav {
+/* Navbar styling */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+  z-index: 1000;
+  transition: left 0.3s ease;
+}
+
+.navbar-content {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: #333;
-  padding: 10px 20px;
-  color: white;
+  /*justify-content: space-between;*/
 }
 
-/* Logo */
-.logo a {
-  color: white;
-  font-size: 20px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* Navigation links */
-ul {
-  display: flex;
-  list-style: none;
-  gap: 20px;
-}
-
-li a {
-  color: white;
-  text-decoration: none;
-  font-size: 16px;
-}
-
-/* Hamburger menu button */
-.menu-toggle {
-  display: none;
+.menu-btn {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 30px;
   color: white;
   cursor: pointer;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: block; /* Show the hamburger button */
+.brand {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Side menu styling */
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Hide side menu initially */
+  width: 250px;
+  height: 100%;
+  background-color: #333;
+  color: white;
+  transition: all 0.3s ease;
+  padding-top: 60px;
+}
+
+  .side-menu.open {
+    left: 0; /* Show side menu when open */
   }
 
-  ul {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    background: #444;
-    padding: 10px;
+  .side-menu ul {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
   }
 
-    ul.show {
-      display: flex;
+    .side-menu ul li {
+      margin: 20px 0;
     }
 
-  li {
-    padding: 10px 20px;
-    text-align: center;
-  }
+      .side-menu ul li a {
+        color: white;
+        text-decoration: none;
+      }
+
+/* When side menu is open, shift the navbar */
+.navbar.open {
+  left: 250px; /* Shift navbar to the right */
+}
+
+/* Optional: Add a shadow effect to the navbar when the side menu is open */
+.navbar.open {
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }

@@ -1,16 +1,15 @@
-<nav>
-  <div class="logo">
-    <a routerLink="/">MyBlog</a>
+<nav class="navbar">
+  <div class="navbar-content">
+    <button class="menu-btn" (click)="toggleMenu()">☰</button>
+    <span class="brand">My App</span>
   </div>
-
-  <button class="menu-toggle" (click)="toggleMenu()">
-    ☰
-  </button>
-
-  <ul [class.show]="isMenuOpen">
-    <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
-    <li><a routerLink="/about" (click)="closeMenu()">About</a></li>
-    <li><a routerLink="/blog" (click)="closeMenu()">Blog</a></li>
-    <li><a routerLink="/login" (click)="closeMenu()">Login</a></li>
-  </ul>
 </nav>
+
+<div class="side-menu" [class.open]="isMenuOpen()">
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Services</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</div>
