@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+import { UsersService } from '../../core/services/users.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent {
   isLoading = false;
   apiURL = 'https://localhost:44341/';
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
+  constructor(private fb: FormBuilder, private userService: UsersService, private router: Router, private notification: NotificationService) { }
 
   ngOnInit() {
     this.createForm();
@@ -40,23 +41,21 @@ export class LoginComponent {
         password: this.loginForm.get('password')?.value,
       }
 
-    //  this.digiDarshanService.login(body).subscribe((response) => {
-    //    this.isLoading = false;
-    //    if (response.isSuccess) {
-    //      alert(response.message);
-    //      this.authService.login();
-    //      this.router.navigate(['/digidarshanregister']);
-    //    } else {
-    //      alert(response.message);
-    //    }
-    //  },
-    //    (error) => {
-    //      this.isLoading = false;
-    //      alert('The server is refusing the connection.');
-    //    }
-    //  )
-    //} else {
-    //  console.log('Invalid form');
+      this.userService.login(body).subscribe((response) => {
+        this.isLoading = false;
+        if (response.success) {
+          //alert(response.message);
+          this.notification.showNotification('success', response.message);
+          this.router.navigate(['/digidarshanregister']);
+        } else {
+          this.notification.showNotification('danger', response.message);
+        }
+      },
+        (errorMsg) => {
+          this.isLoading = false;
+        });
+    } else {
+      console.log('Invalid form');
     }
   }
 }
