@@ -8,13 +8,13 @@ namespace BloggingAPI.Generic
     {
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            var jwtConfig = configuration.GetSection("JwtConfig");
+            IConfigurationSection jwtConfig = configuration.GetSection("JwtConfig");
 
             string? secretKey = jwtConfig["SecretKey"];
             string? issuer = jwtConfig["Issuer"];
             string? audience = jwtConfig["Audience"];
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            _ = services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -25,11 +25,11 @@ namespace BloggingAPI.Generic
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = issuer,
                         ValidAudience = audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
                     };
                 });
 
-            services.AddAuthorization(options =>
+            _ = services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("SuperAdmin", "Admin"));
                 options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User", "Admin"));

@@ -19,7 +19,7 @@ namespace BloggingAPI.v1
         {
             try
             {
-                var jwtConfig = _config.GetSection("JwtConfig");
+                IConfigurationSection jwtConfig = _config.GetSection("JwtConfig");
 
                 string? secretKey = jwtConfig["SecretKey"];
                 string? issuer = jwtConfig["Issuer"];
@@ -31,10 +31,10 @@ namespace BloggingAPI.v1
                     throw new Exception("JWT configuration values are missing in appsettings.json.");
                 }
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-                var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(secretKey));
+                SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
 
-                var claims = new List<Claim>
+                List<Claim> claims = new()
                 {
                     new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                     new Claim(ClaimTypes.Name, userName),
@@ -42,19 +42,19 @@ namespace BloggingAPI.v1
                     new Claim(ClaimTypes.MobilePhone, mobile),
                 };
 
-                foreach (var roleName in roleNames)
+                foreach (string roleName in roleNames)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, roleName));
                 }
 
-                foreach (var permission in permissions)
+                foreach (string permission in permissions)
                 {
-                    claims.Add(new Claim("Permission", permission)); 
+                    claims.Add(new Claim("Permission", permission));
                 }
 
                 //claims.AddRange(roleNames.Select(roleId => new Claim("roleNames", roleId.ToString())));
 
-                var token = new JwtSecurityToken(
+                JwtSecurityToken token = new(
                     issuer: issuer,
                     audience: audience,
                     claims: claims,

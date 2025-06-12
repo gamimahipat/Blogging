@@ -61,7 +61,7 @@ export class LoginComponent {
         if (response.success) {
           //alert(response.message);
           this.notification.showNotification('success', response.message);
-          this.router.navigate(['/digidarshanregister']);
+          this.router.navigate(['/admin-dashboard']);
         } else {
           this.notification.showNotification('danger', response.message);
         }

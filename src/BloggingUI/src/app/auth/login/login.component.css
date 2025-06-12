@@ -9,3 +9,32 @@
   /*margin-bottom: 20px;*/
   margin-top: 20px;
 }
+
+.center-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  font-weight: bold;
+  color: #ffffff;
+  background: linear-gradient(45deg, #2196f3, #21cbf3);
+  border: none;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+  cursor: pointer;
+}
+
+  .login-button:hover {
+    background: linear-gradient(45deg, #21cbf3, #2196f3);
+  }
+
+  .login-button:disabled {
+    background: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+  }
