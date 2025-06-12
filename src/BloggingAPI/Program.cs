@@ -1,7 +1,7 @@
 using BloggingAPI.Generic;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog
 builder.ConfigureLogging();
@@ -9,7 +9,7 @@ builder.ConfigureLogging();
 // Add Services
 builder.Services.ConfigureServices(builder.Configuration);
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure Middleware
 app.ConfigureMiddlewares();

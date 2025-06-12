@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfigService } from './app/core/services/config.service';
 import { ToastrModule } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 function appInitializer(configService: ConfigService) {
   return () => configService.loadConfig();
@@ -31,6 +32,6 @@ bootstrapApplication(AppComponent, {
       deps: [ConfigService],
       multi: true,
     },
-    provideAnimations(),
+    provideAnimations(), provideAnimationsAsync(),
   ],
 }).catch(err => console.error(err));

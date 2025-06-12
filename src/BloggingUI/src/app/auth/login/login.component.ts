@@ -4,11 +4,20 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { UsersService } from '../../core/services/users.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -17,13 +26,18 @@ export class LoginComponent {
   isLoading = false;
   apiURL = 'https://localhost:44341/';
 
-  constructor(private fb: FormBuilder, private userService: UsersService, private router: Router, private notification: NotificationService) { }
+  //constructor(private fb: FormBuilder, private userService: UsersService, private router: Router, private notification: NotificationService) { }
+  hide = true;
 
+  constructor(private fb: FormBuilder, private userService: UsersService, private router: Router, private notification: NotificationService) {
+  }
   ngOnInit() {
     this.createForm();
     //if (this.authGuard.canActivate())
     //  this.router.navigate(['/digidarshanregister']);
   }
+
+
 
   createForm() {
     this.loginForm = this.fb.group({
@@ -31,6 +45,7 @@ export class LoginComponent {
       password: ['', [Validators.required]]
     });
   }
+
 
   onSubmit() {
     if (this.loginForm.valid) {
