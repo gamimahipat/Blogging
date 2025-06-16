@@ -1,15 +1,11 @@
 <nav class="navbar">
-  <div class="navbar-content">
+
+  <div class="left-section">
     <button class="menu-btn" (click)="toggleMenu()">☰</button>
-    <span class="brand">My App</span>
+    <span class="brand">Blogger App</span>
+  </div>
+
+  <div class="right-section">
+    <button class="logout-btn" (click)="logout()">Logout</button>
   </div>
 </nav>
-
-<div class="side-menu" [class.open]="isMenuOpen()">
-  <ul>
-    <li><a href="#">Home</a></li>
-    <li><a href="#">About</a></li>
-    <li><a href="#">Services</a></li>
-    <li><a href="#">Contact</a></li>
-  </ul>
-</div>

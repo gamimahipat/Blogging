@@ -7,12 +7,12 @@ namespace BloggingAPI.v1
     public class UsersRepository : IUsersRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _configuration;
         private readonly IJwtHelper _jwtHelper;
-        public UsersRepository(ApplicationDbContext context, IConfiguration config, IJwtHelper jwtHelper)
+        public UsersRepository(ApplicationDbContext context, IConfiguration configuration, IJwtHelper jwtHelper)
         {
             _context = context;
-            _config = config;
+            _configuration = configuration;
             _jwtHelper = jwtHelper;
         }
 
@@ -60,7 +60,7 @@ namespace BloggingAPI.v1
 
                 if (existingUser != null)
                 {
-                    List<string> conflicts = new List<string>();
+                    List<string> conflicts = new();
                     if (existingUser.UserName == user.UserName) conflicts.Add("Username");
                     if (existingUser.Email == user.Email) conflicts.Add("Email");
                     if (existingUser.MobileNo == user.MobileNo) conflicts.Add("Mobile");
@@ -68,13 +68,13 @@ namespace BloggingAPI.v1
                     return new ApiResponse(false, $"{string.Join(", ", conflicts)} already exist.", null);
                 }
 
-                using var transaction = await _context.Database.BeginTransactionAsync();
+                using Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction transaction = await _context.Database.BeginTransactionAsync();
 
                 // Generate Salt and Hashed Password
                 string salt = PasswordHelper.GenerateSalt();
                 string hashedPassword = PasswordHelper.HashPassword(user.Password, salt);
 
-                Users users = new Users
+                Users users = new()
                 {
                     UserName = user.UserName,
                     Name = user.Name,
@@ -86,16 +86,16 @@ namespace BloggingAPI.v1
                     Bio = user.Bio
                 };
 
-                await _context.Users.AddAsync(users);
-                await _context.SaveChangesAsync();
+                _ = await _context.Users.AddAsync(users);
+                _ = await _context.SaveChangesAsync();
 
-                var userRole = new UserRoles
+                UserRoles userRole = new()
                 {
                     UserId = users.Id,
                     RoleId = user.RoleId
                 };
-                await _context.UserRoles.AddAsync(userRole);
-                await _context.SaveChangesAsync();
+                _ = await _context.UserRoles.AddAsync(userRole);
+                _ = await _context.SaveChangesAsync();
 
                 await transaction.CommitAsync();
 
@@ -115,21 +115,16 @@ namespace BloggingAPI.v1
                 Users? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == login.UserName || u.Email == login.UserName || u.MobileNo == login.UserName);
 
                 if (user == null)
-                    return new ApiResponse(false, "Invalid email or password.", null);
+                    return new ApiResponse(false, "Incorrect username.", null);
 
                 string hashedPassword = PasswordHelper.HashPassword(login.Password, user.Salt);
 
                 if (user.PasswordHash != hashedPassword)
                     return new ApiResponse(false, "Incorrect password.", null);
 
-                //List<int> roleIds = await _context.UserRoles.Where(ur => ur.UserId == user.Id)
-                //                    .Include(ur => ur.RoleId).Select(ur => ur.Id).ToListAsync();
-
                 FormattableString query = $@"SELECT r.Name FROM UserRoles ur WITH (NOLOCK)
-                                  JOIN Roles r WITH(NOLOCK) ON  ur.RoleId=r.Id
+                                  JOIN Roles r WITH(NOLOCK) ON  ur.RoleId = r.Id
                                   WHERE ur.UserId = {user.Id}";
-
-                //List<string> roleNames = await _context.Database.SqlQuery<string>(query).AsNoTracking().ToListAsync();
 
                 List<string> roleNames = await _context.Roles.FromSqlInterpolated(query).Select(r => r.Name).AsNoTracking().ToListAsync();
 
@@ -155,59 +150,59 @@ namespace BloggingAPI.v1
                     Permissions = permissions
                 };
 
-                return new ApiResponse(true, "Login successful.", responseData);
+                return new ApiResponse(true, "Login successfully.", responseData);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "LoginUser: Error during user login.");
+                Log.Error(ex, "AuthenticateUser: Error during user login.");
                 return new ApiResponse(false, "Internal server error", null);
             }
         }
 
-        //public async Task UpdateUserAsync(Users user)
-        //{
-        //    try
-        //    {
-        //        _context.Entry(user).State = EntityState.Modified;
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error(ex, "Check Serilog Message: Error while updating user {UserId}", user.Id);
-        //        throw;
-        //    }
-        //}
+        public async Task UpdateUserAsync(Users user)
+        {
+            try
+            {
+                _context.Entry(user).State = EntityState.Modified;
+                _ = await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Check Serilog Message: Error while updating user {UserId}", user.Id);
+                throw;
+            }
+        }
 
-        //public async Task DeleteUserAsync(int id)
-        //{
-        //    try
-        //    {
-        //        var user = await _context.Users.FindAsync(id);
-        //        if (user != null)
-        //        {
-        //            _context.Users.Remove(user);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error(ex, "Check Serilog Message: Error while deleting user with ID {UserId}", id);
-        //        throw;
-        //    }
-        //}
+        public async Task DeleteUserAsync(int id)
+        {
+            try
+            {
+                Users? user = await _context.Users.FindAsync(id);
+                if (user != null)
+                {
+                    _ = _context.Users.Remove(user);
+                    _ = await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Check Serilog Message: Error while deleting user with ID {UserId}", id);
+                throw;
+            }
+        }
 
-        //public async Task<bool> UserExistsAsync(int id)
-        //{
-        //    try
-        //    {
-        //        return await _context.Users.AnyAsync(e => e.Id == id);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error(ex, "Check Serilog Message: Error checking existence of user with ID {UserId}", id);
-        //        return false;
-        //    }
-        //}
+        public async Task<bool> UserExistsAsync(int id)
+        {
+            try
+            {
+                return await _context.Users.AnyAsync(e => e.Id == id);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Check Serilog Message: Error checking existence of user with ID {UserId}", id);
+                return false;
+            }
+        }
 
     }
 }

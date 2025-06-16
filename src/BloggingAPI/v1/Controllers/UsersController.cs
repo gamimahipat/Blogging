@@ -49,19 +49,15 @@ namespace BloggingAPI.v1
         [Authorize(Policy = AuthorizationPolicies.RequireUserOrAdmin)]
         public async Task<ActionResult<ApiResponse>> GetUserById(int id)
         {
-            if (id <= 0)
-                return ApiResponse.ErrorResponse("Invalid user ID.");
-
-            return await _usersRepository.GetUserById(id);
+            return id <= 0 ? (ActionResult<ApiResponse>)ApiResponse.ErrorResponse("Invalid user ID.") : (ActionResult<ApiResponse>)await _usersRepository.GetUserById(id);
         }
 
         [HttpGet("[action]")]
         public async Task<ActionResult<ApiResponse>> GetUserDetail()
         {
-            if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId) || userId == 0)
-                return ApiResponse.ErrorResponse("Invalid user session.");
-
-            return await _usersRepository.GetUserById(userId);
+            return !int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId) || userId == 0
+                ? (ActionResult<ApiResponse>)ApiResponse.ErrorResponse("Invalid user session.")
+                : (ActionResult<ApiResponse>)await _usersRepository.GetUserById(userId);
         }
 
         [HttpPost("[action]"), AllowAnonymous]

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BloggingAPI.Generic;
 
 namespace BloggingAPI.v1
 {
@@ -19,7 +18,7 @@ namespace BloggingAPI.v1
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Roles>>> GetRoles()
         {
-            var roles = await _rolesRepository.GetAllRolesAsync();
+            IEnumerable<Roles> roles = await _rolesRepository.GetAllRolesAsync();
             return Ok(roles);
         }
 
@@ -27,13 +26,8 @@ namespace BloggingAPI.v1
         [HttpGet("{id}")]
         public async Task<ActionResult<Roles>> GetRoles(int id)
         {
-            var role = await _rolesRepository.GetRoleByIdAsync(id);
-            if (role == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(role);
+            Roles? role = await _rolesRepository.GetRoleByIdAsync(id);
+            return role == null ? (ActionResult<Roles>)NotFound() : (ActionResult<Roles>)Ok(role);
         }
 
         // PUT: api/Roles/5
@@ -76,7 +70,7 @@ namespace BloggingAPI.v1
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRoles(int id)
         {
-            var role = await _rolesRepository.GetRoleByIdAsync(id);
+            Roles? role = await _rolesRepository.GetRoleByIdAsync(id);
             if (role == null)
             {
                 return NotFound();

@@ -1,0 +1,10 @@
+
+<app-navbar (menuToggle)="toggleSidebar()" (logoutEvent)="logout()"></app-navbar>
+
+<div class="layout-container">
+  <app-sidebar [closed]="!isSidebarOpen"> </app-sidebar>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
