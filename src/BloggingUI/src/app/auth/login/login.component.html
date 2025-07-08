@@ -1,6 +1,8 @@
-<div *ngIf="isLoading" class="loading-overlay">
-  <div class="spinner"></div>
-</div>
+@if (isLoading) {
+  <div class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+}
 
 <mat-card class="login-card">
   <mat-card-title class="center-title">Login</mat-card-title>
@@ -8,9 +10,11 @@
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Username</mat-label>
       <input matInput formControlName="username" placeholder="Username" />
-      <mat-error *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-        Username is required
-      </mat-error>
+      @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+        <mat-error>
+          Username is required
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
@@ -19,9 +23,11 @@
       <button mat-icon-button matSuffix type="button" (click)="hide = !hide">
         <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
-      <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-        Password is required
-      </mat-error>
+      @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+        <mat-error>
+          Password is required
+        </mat-error>
+      }
     </mat-form-field>
 
     <button mat-raised-button class="full-width login-button" [disabled]="loginForm.invalid">

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { UsersService } from '../../core/services/users.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -12,11 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-login',
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, MatInputModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatCardModule,
-        MatIconModule,],
+    imports: [FormsModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatCardModule, MatIconModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })
